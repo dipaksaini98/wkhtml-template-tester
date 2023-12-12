@@ -1,10 +1,965 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>TETS</title>
-  </head>
-  <body>
-    <input type="checkbox" id="myCheckbox" {{if .CheckboxState}}checked{{end}}>
-  </body>
-</html>
+<body>
+  <!-- BoL info table -->
+  <table class="table">
+    <!-- First Row: Ship from + BoL no. -->
+    <tr class="table-row">
+      <!-- Ship from cell -->
+      <td class="table-cell">
+        <table style="width: 100%">
+          <tr>
+            <td>
+              <div class="">
+                <h3 style="display: block; margin-top: 16px">
+                  Bill of Ladding
+                </h3>
+                <p style="font-size: 12px; margin: 0">
+                  <span style="font-weight: 600">Generated On:</span>
+                  <span>{{.GeneratedDate}}</span>
+                </p>
+              </div>
+            </td>
+            <td>
+              <!-- warehouse logo -->
+              <img
+                src="{{.WarehouseLogo}}"
+                alt=""
+                width="100px"
+                height="60px"
+                style="float: right"
+              />
+            </td>
+          </tr>
+        </table>
+
+        <div class="cell-content">
+          <div class="bol input-wrapper">
+            <label for="bol">Ship From*</label>
+            <p class="value">{{.ShipFrom.Address}}</p>
+          </div>
+          <div class="flex-input-container">
+            <div class="bol input-wrapper inline">
+              <label for="bol">SID #</label>
+              <p class="value">{{.ShipFrom.SID}}</p>
+            </div>
+            <div class="bol input-wrapper inline">
+              {{if .ShipFrom.FOB}}
+              <img
+                height="12"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+              />
+              {{else}}
+              <img
+                height="12"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+              />
+              {{end}}
+              <p class="checkbox-label" style="font-size: 12px">FOB</p>
+            </div>
+          </div>
+        </div>
+      </td>
+
+      <!-- Bol Detail cell spaning across multiple rows -->
+      <td class="table-cell" rowspan="3">
+        <!-- Bol No. container -->
+        <div class="cell-content">
+          <div class="bol input-wrapper inline bol-number-wrapper">
+            <label for="bol">BoL No.</label>
+            <p class="value">{{.BOLNumber}}</p>
+          </div>
+          <div class="barcode-spacer">
+            <div class="barcode-wrapper">
+              <img
+                height="24px"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjciIGhlaWdodD0iNTIuNSIgdmlld0JveD0iMCAwIDE2NyA1Mi41Ij4KICA8ZyBpZD0iR3JvdXBfNTU2NyIgZGF0YS1uYW1lPSJHcm91cCA1NTY3IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNzA4IC0yNjIpIj4KICAgIDxwYXRoIGlkPSJJY29uX2F3ZXNvbWUtYmFyY29kZSIgZGF0YS1uYW1lPSJJY29uIGF3ZXNvbWUtYmFyY29kZSIgZD0iTTAsMzUuNTU0VjQuNUg0LjA3M1YzNS41NTRabTYuMDc3LS4wMjJWNC41SDguMTQ2VjM1LjUzMlptNi4xNDIsMFY0LjVoMlYzNS41MzJabTEwLjE1LDBWNC41aDJWMzUuNTMyWm04LjE0NiwwVjQuNWg0LjAwOFYzNS41MzJabTEwLjE1LDBWNC41aDJWMzUuNTMyWm00LjA3MywwVjQuNWgyVjM1LjUzMlptNC4wNzMsMFY0LjVoMlYzNS41MzJabTguMDgxLDBWNC41aDQuMDczVjM1LjUzMlptMTAuMTUsMFY0LjVoNC4wNzNWMzUuNTMyWm04LjE0NSwwVjQuNWg0LjA3M1YzNS41MzJabTguMTQ2LDBWNC41SDg3LjRWMzUuNTMyWm02LjA3NywwVjQuNWg0LjA3M1YzNS41MzJabTEwLjIxNCwwVjQuNUgxMDUuN1YzNS41MzJabTguMDgxLDBWNC41aDIuMDY5VjM1LjUzMlptNC4wNzMuMDIyVjQuNWg0LjA3M1YzNS41NTRaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MzMuNTc2IDI2OC4yMjMpIiBmaWxsPSIjZDBkMWViIi8+CiAgICA8ZyBpZD0iR3JvdXBfNTU2NSIgZGF0YS1uYW1lPSJHcm91cCA1NTY1IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxKSI+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM2OSIgZGF0YS1uYW1lPSJMaW5lIDM2OSIgeTI9IjUxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NzMuNSAyNjIuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MCIgZGF0YS1uYW1lPSJMaW5lIDM3MCIgeDI9IjEzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NjAuNSAyNjIuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MSIgZGF0YS1uYW1lPSJMaW5lIDM3MSIgeDI9IjEzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NjAuNSAzMTQpIiBmaWxsPSJub25lIiBzdHJva2U9IiNkMGQxZWIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPC9nPgogICAgPGcgaWQ9Ikdyb3VwXzU1NjYiIGRhdGEtbmFtZT0iR3JvdXAgNTU2NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzA4LjUgMjYyLjUpIj4KICAgICAgPGxpbmUgaWQ9IkxpbmVfMzY5LTIiIGRhdGEtbmFtZT0iTGluZSAzNjkiIHkyPSI1MSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MC0yIiBkYXRhLW5hbWU9IkxpbmUgMzcwIiB4MT0iMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MS0yIiBkYXRhLW5hbWU9IkxpbmUgMzcxIiB4MT0iMTMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNTEuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+                alt="barcode"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Carrier Info Container -->
+        <div
+          class="cell-content carrier-detail-wrapper"
+          style="border-top: 1px solid #d0d1eb"
+        >
+          <div class="bol input-wrapper inline">
+            <label for="bol">Carrier Name*</label>
+            <p class="value">{{.CarrierName}}</p>
+          </div>
+          <div class="bol input-wrapper inline">
+            <label for="bol">Trailer No.*</label>
+            <p class="value">{{.TrailerNo}}</p>
+          </div>
+          <div class="bol input-wrapper inline">
+            <label for="bol">Seal No.</label>
+            <p class="value">{{.SealNumbers}}</p>
+          </div>
+        </div>
+
+        <!-- SCAC and Pro No. container -->
+        <div
+          class="cell-content scac-detail-wrapper"
+          style="border-top: 1px solid #d0d1eb"
+        >
+          <div class="bol input-wrapper inline">
+            <label style="width: 82px" for="bol">SCAC</label>
+            <p class="value">{{.SCAC}}</p>
+          </div>
+          <div class="bol input-wrapper inline">
+            <label style="width: 82px" for="bol">Pro No.</label>
+            <p class="value">{{.ProNo}}</p>
+          </div>
+          <div class="barcode-spacer">
+            <div class="barcode-wrapper">
+              <img
+                height="24px"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjciIGhlaWdodD0iNTIuNSIgdmlld0JveD0iMCAwIDE2NyA1Mi41Ij4KICA8ZyBpZD0iR3JvdXBfNTU2NyIgZGF0YS1uYW1lPSJHcm91cCA1NTY3IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNzA4IC0yNjIpIj4KICAgIDxwYXRoIGlkPSJJY29uX2F3ZXNvbWUtYmFyY29kZSIgZGF0YS1uYW1lPSJJY29uIGF3ZXNvbWUtYmFyY29kZSIgZD0iTTAsMzUuNTU0VjQuNUg0LjA3M1YzNS41NTRabTYuMDc3LS4wMjJWNC41SDguMTQ2VjM1LjUzMlptNi4xNDIsMFY0LjVoMlYzNS41MzJabTEwLjE1LDBWNC41aDJWMzUuNTMyWm04LjE0NiwwVjQuNWg0LjAwOFYzNS41MzJabTEwLjE1LDBWNC41aDJWMzUuNTMyWm00LjA3MywwVjQuNWgyVjM1LjUzMlptNC4wNzMsMFY0LjVoMlYzNS41MzJabTguMDgxLDBWNC41aDQuMDczVjM1LjUzMlptMTAuMTUsMFY0LjVoNC4wNzNWMzUuNTMyWm04LjE0NSwwVjQuNWg0LjA3M1YzNS41MzJabTguMTQ2LDBWNC41SDg3LjRWMzUuNTMyWm02LjA3NywwVjQuNWg0LjA3M1YzNS41MzJabTEwLjIxNCwwVjQuNUgxMDUuN1YzNS41MzJabTguMDgxLDBWNC41aDIuMDY5VjM1LjUzMlptNC4wNzMuMDIyVjQuNWg0LjA3M1YzNS41NTRaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MzMuNTc2IDI2OC4yMjMpIiBmaWxsPSIjZDBkMWViIi8+CiAgICA8ZyBpZD0iR3JvdXBfNTU2NSIgZGF0YS1uYW1lPSJHcm91cCA1NTY1IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxKSI+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM2OSIgZGF0YS1uYW1lPSJMaW5lIDM2OSIgeTI9IjUxIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NzMuNSAyNjIuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MCIgZGF0YS1uYW1lPSJMaW5lIDM3MCIgeDI9IjEzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NjAuNSAyNjIuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MSIgZGF0YS1uYW1lPSJMaW5lIDM3MSIgeDI9IjEzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4NjAuNSAzMTQpIiBmaWxsPSJub25lIiBzdHJva2U9IiNkMGQxZWIiIHN0cm9rZS1saW5lY2FwPSJzcXVhcmUiIHN0cm9rZS13aWR0aD0iMSIvPgogICAgPC9nPgogICAgPGcgaWQ9Ikdyb3VwXzU1NjYiIGRhdGEtbmFtZT0iR3JvdXAgNTU2NiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzA4LjUgMjYyLjUpIj4KICAgICAgPGxpbmUgaWQ9IkxpbmVfMzY5LTIiIGRhdGEtbmFtZT0iTGluZSAzNjkiIHkyPSI1MSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MC0yIiBkYXRhLW5hbWU9IkxpbmUgMzcwIiB4MT0iMTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICAgIDxsaW5lIGlkPSJMaW5lXzM3MS0yIiBkYXRhLW5hbWU9IkxpbmUgMzcxIiB4MT0iMTMiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAgNTEuNSkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2QwZDFlYiIgc3Ryb2tlLWxpbmVjYXA9InNxdWFyZSIgc3Ryb2tlLXdpZHRoPSIxIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+                alt="barcode"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Freight charge terms container -->
+        <div class="cell-content" style="border-top: 1px solid #d0d1eb">
+          <div class="bol input-wrapper inline">
+            <label for="bol">
+              Freight charge terms (prepaid unless marked otherwise)
+            </label>
+            <br />
+            {{if .FreightChargeTerms.Collect}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label" style="font-size: 12px">Collect</p>
+            {{if .FreightChargeTerms.Prepaid}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label" style="font-size: 12px">Prepaid</p>
+            {{if .FreightChargeTerms.ThirdParty}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label" style="font-size: 12px">3rd Party</p>
+          </div>
+        </div>
+
+        <!-- Master BoL check box container -->
+        <div class="cell-content" style="border-top: 1px solid #d0d1eb">
+          <div class="bol input-wrapper inline">
+            {{if .MasterBOL}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label">
+              Master BoL: w/attached underlying BoL(s)
+            </p>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <!-- Second Row: Ship to + Carrier Info. -->
+    <tr class="table-row">
+      <td class="table-cell">
+        <div class="cell-content">
+          <div class="bol input-wrapper">
+            <label for="bol">Ship To*</label>
+            <p class="value">{{.ShipTo.Address}}</p>
+          </div>
+          <div class="flex-input-container">
+            <div class="bol input-wrapper inline">
+              <label for="bol">CID #</label>
+              <p class="value">{{.ShipTo.CID}}</p>
+            </div>
+            <div class="bol input-wrapper inline">
+              {{if .ShipTo.FOB}}
+              <img
+                height="12"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+              />
+              {{else}}
+              <img
+                height="12"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+              />
+              {{end}}
+              <p class="checkbox-label" style="font-size: 12px">FOB</p>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <!-- Third Row: 3rd party info + Scac & Pro no. -->
+    <tr class="table-row">
+      <td class="table-cell">
+        <div class="cell-content">
+          <div class="bol input-wrapper">
+            <label for="bol"
+              >3<sup>rd</sup> party freight charges - Bill To</label
+            >
+            <p class="value">{{.BillTo.Address}}</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <!-- Last row: Special Instruction -->
+    <tr class="table-row last-row">
+      <td class="table-cell full-width" colspan="2">
+        <div class="cell-content">
+          <div class="bol input-wrapper">
+            <label for="bol" style="display: inline"
+              >Special Instructions</label
+            >
+            <p class="value" style="display: inline">{{.Instruction}}</p>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- BoL item table -->
+  <div class="table-wrapper">
+    <div class="table-name-header">
+      <p class="table-title">Customer Order Item Information</p>
+    </div>
+    <table class="bol-item-table t">
+      <!-- Table headers -->
+      <thead>
+        <tr>
+          <th style="width: 140px">Customer Order No.</th>
+          <th>#Pkgs.</th>
+          <th>Weight</th>
+          <th>Unit</th>
+          <th>Pallet/Slip</th>
+          <th style="width: 48%">Additional Shipper Info</th>
+        </tr>
+      </thead>
+      <!-- Table body -->
+      <tbody>
+        <!-- Render table rows using a loop -->
+        {{ range $index, $item := .CustomerOrderInfo.OrderInfo}}
+        <tr>
+          <td>
+            <p class="value">{{$item.OrderNumber}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.Pkgs}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.Weight}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.WeightUnit}}</p>
+          </td>
+          <td style="padding-left: 10px; padding-top: 4px">
+            {{if $item.PalletOrSlip}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+          </td>
+          <td>
+            <p class="value">{{$item.AdditionalShipperInfo}}</p>
+          </td>
+        </tr>
+        {{end}}
+        <tr>
+          <td class="bold">Totals</td>
+          <td>
+            <p class="value">{{.CustomerOrderInfo.TotalPackages}}</p>
+          </td>
+          <td colspan="2">
+            <p class="value">{{.CustomerOrderInfo.TotalWeight}}</p>
+          </td>
+          <td colspan="2" class="dud-cell"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- BoL carrier info table -->
+  <div class="table-wrapper" style="width: 100%">
+    <div class="table-name-header">
+      <p class="table-title">Carrier Information</p>
+    </div>
+    <table class="bol-carrier-info-table table t" style="table-layout: fixed">
+      <colgroup>
+        <col span="2" style="width: 12.5%" />
+        <col span="2" style="width: 12.5%" />
+        <col span="3" style="width: 15%" />
+        <col span="1" style="width: 300px" />
+        <col span="2" style="width: 15%" />
+      </colgroup>
+
+      <!-- Table headers -->
+      <thead>
+        <!-- <tr class="table-name-header">
+          <td class="table-title" colspan="10">Carrier Information</td>
+        </tr> -->
+        <tr>
+          <th colspan="2" style="width: 10%">Handling Unit</th>
+          <th colspan="2" style="width: 10%">Package</th>
+          <th colspan="3" style="width: 20%">Weight</th>
+          <th style="width: 300px">Commodity Description</th>
+          <th colspan="2" style="width: 15%">LTL Only</th>
+        </tr>
+        <tr class="secondary-header">
+          <th>Qty</th>
+          <th>Type</th>
+          <th>Qty</th>
+          <th>Type</th>
+          <th>Weight</th>
+          <th>Unit</th>
+          <th>H.M (X)</th>
+          <th style="width: 300px">
+            Mark commodities requiring special handling. See Section 2(e) of
+            MNMFC Item 360
+          </th>
+          <th>NMFC No.</th>
+          <th>Class</th>
+        </tr>
+      </thead>
+      <!-- Table body -->
+      <tbody>
+        <!-- Render table rows using a loop -->
+        {{ range $index, $item := .CarrierInfo.CarrierData}}
+        <tr>
+          <td>
+            <p class="value">{{$item.HandlingUnitQty}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.HandlingUnitType}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.PackageQty}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.PackageType}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.Weight}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.WeightUnit}}</p>
+          </td>
+          <td style="padding-left: 6px; padding-top: 4px">
+            {{if $item.HazardousMaterial}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+          </td>
+          <td>
+            <p class="value" style="width: 300px">
+              {{$item.CommodityDescription}}
+            </p>
+          </td>
+          <td>
+            <p class="value">{{$item.NMFC}}</p>
+          </td>
+          <td>
+            <p class="value">{{$item.Class}}</p>
+          </td>
+        </tr>
+        {{end}}
+        <!-- Totals row -->
+        <tr>
+          <td>
+            <p class="value">{{.CarrierInfo.TotalHandlingUnitQty}}</p>
+          </td>
+          <td class="dud-cell"></td>
+          <td>
+            <p class="value">{{.CarrierInfo.TotalPackages}}</p>
+          </td>
+          <td class="dud-cell"></td>
+          <td>
+            <p class="value">{{.CarrierInfo.TotalWeight}}</p>
+          </td>
+          <td colspan="5" class="dud-cell"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="table tnc-wrapper">
+      <tr>
+        <td class="row-width-half table-cell">
+          <div class="input-wrapper cell-content">
+            <p>
+              Where the rate is dependent on value, shippers are required to
+              state specifically in writing the agreed or declared value of the
+              property as follows:
+              <br />
+              "The agreed or declared value of the property is specifically
+              stated by the shipper to be not exceeding
+            </p>
+          </div>
+        </td>
+        <td class="row-width-half table-cell cell-content">
+          <div class="bol input-wrapper inline">
+            <label
+              >COD Amount: * {{ .CODAmount.Currency.Symbol }}
+              {{.CODAmount.Amount}}</label
+            >
+          </div>
+          <div class="bol input-wrapper inline">
+            <label>Fee Terms:</label>
+            {{if .FeeTerms.Collect}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label" style="font-size: 12px">Collect</p>
+
+            {{if .FeeTerms.Prepaid}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label" style="font-size: 12px">Prepaid</p>
+            {{if .FeeTerms.CustomerCheckAcceptable}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{else}}
+            <img
+              height="12"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+            />
+            {{end}}
+            <p class="checkbox-label" style="font-size: 12px">
+              Customer Check Acceptable
+            </p>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="table-cell">
+          <div class="input-wrapper cell-content">
+            <p>
+              NOTE: Liability Limitation for loss or damage in this shipment may
+              be applicable. See 49 U.S.C. - 14706(c)(1)(A) and (B).
+            </p>
+          </div>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="row-width-half table-cell">
+          <div class="input-wrapper cell-content">
+            <p>
+              RECEIVED, subject to individually determined rates or contracts
+              that have been agreed upon in writing between the carrier and
+              shipper, if applicable, otherwise to the rates, classifications
+              and rules that have been established by the carrier and are
+              available to the shipper, on request, and to all applicable state
+              and federal regulations.
+            </p>
+          </div>
+        </td>
+        <td class="row-width-half table-cell cell-content">
+          <div class="bol input-wrapper inline">
+            <p>
+              The carrier shall not make delivery of this shipment without
+              payment of freight and all other lawful charges.
+            </p>
+          </div>
+          <br />
+          <div class="bol input-wrapper inline">
+            <label>Shipper Signature</label>
+            <p>______________________</p>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Final table for the last row of the BoL -->
+  <div class="table-wrapper">
+    <table class="table tnc-wrapper" style="table-layout: fixed">
+      <tr>
+        <td class="table-cell" style="width: 230px">
+          <div class="input-wrapper cell-content">
+            <div class="top-content">
+              <p>
+                This is to certify that the above named materials are properly
+                classified, packaged, marked and labeled, and are in proper
+                condition for transportation according to the applicable
+                regulations of the DOT.
+              </p>
+            </div>
+            <div class="bottom-content" style="margin-top: 36px">
+              <p>______________________</p>
+              <label>Shipper Signature with date</label>
+            </div>
+          </div>
+        </td>
+        <td style="min-width: 278px; vertical-align: top">
+          <table>
+            <tr>
+              <td style="vertical-align: top">
+                <div
+                  class="input-wrapper cell-content"
+                  style="display: inline-block; width: 92px"
+                >
+                  <label>Trailer Loaded</label>
+
+                  <p class="radio-label">
+                    {{if .TrailerLoaded.ByShipper}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{else}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{end}} By Shipper
+                  </p>
+                  <p class="radio-label">
+                    {{if .TrailerLoaded.ByDriver}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{else}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{end}} By Driver
+                  </p>
+                </div>
+              </td>
+
+              <td style="border-left: none; vertical-align: top">
+                <div
+                  class="input-wrapper cell-content"
+                  style="display: inline-block; padding-left: 0px"
+                >
+                  <label>Freight Counted</label>
+                  <p class="radio-label">
+                    {{if .FreightCounted.ByShipper}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{else}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{end}} By Shipper
+                  </p>
+                  <p class="radio-label">
+                    {{if .FreightCounted.ByDriverPallets}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{else}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{end}} By Driver/pallets said to contain
+                  </p>
+                  <p class="radio-label">
+                    {{if .FreightCounted.ByDriverPieces}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU2OSIgZGF0YS1uYW1lPSJHcm91cCA1NTY5IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwMDkpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIzIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjMiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDA5KSIgZmlsbD0iIzJhMmI1YSIvPgogICAgPHBhdGggaWQ9Ikljb25fbWV0cm8tY2hlY2ttYXJrIiBkYXRhLW5hbWU9Ikljb24gbWV0cm8tY2hlY2ttYXJrIiBkPSJNMjIuMTMyLDUuNzg0LDExLjI2NSwxNi42NTIsNi4xOTMsMTEuNTgsMi41NzEsMTUuMiwxMS4yNjUsMjMuOWwxNC40OS0xNC40OVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMzk5Mi44ODMgMjMwMTIuMjE1KSIgZmlsbD0iI2ZmZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{else}}
+                    <img
+                      height="12"
+                      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdmlld0JveD0iMCAwIDM2IDM2Ij4KICA8ZyBpZD0iR3JvdXBfNTU3MCIgZGF0YS1uYW1lPSJHcm91cCA1NTcwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyMzk5NyAtMjMwNjcpIj4KICAgIDxyZWN0IGlkPSJSZWN0YW5nbGVfODIyIiBkYXRhLW5hbWU9IlJlY3RhbmdsZSA4MjIiIHdpZHRoPSIzNiIgaGVpZ2h0PSIzNiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTIzOTk3IDIzMDY3KSIgZmlsbD0iI2VmZWZlZiIvPgogIDwvZz4KPC9zdmc+Cg=="
+                    />
+                    {{end}} By Driver/Pieces
+                  </p>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+
+        <td class="table-cell left-border" style="width: 230px">
+          <div class="input-wrapper cell-content">
+            <div class="top-content">
+              <p>
+                Carrier acknowledges receipt of packages and required placards.
+                Carrier certifies emergency response information was made
+                available and/or carrier has the DOT emergency response
+                guidebook or equivalent documentation in the vehicle. Property
+                described above is received in good order, except as noted.
+              </p>
+            </div>
+
+            <div class="bottom-content" style="margin-top: 12px">
+              <p>______________________</p>
+              <label>Carrier Signature with pickup date</label>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+<style scoped>
+  input {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 2px 8px;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-family: "Gilroy Medium", sans-serif;
+  }
+
+  input:focus {
+    outline: 1px solid #233884b6;
+  }
+  textarea {
+    background-color: #5878ea35;
+    border-radius: 0;
+    padding: 4px;
+    width: 100%;
+    height: 40px;
+    padding: 2px 8px;
+    resize: none;
+    font-size: 12px;
+    font-family: "Gilroy Medium", sans-serif;
+    line-height: 1.6;
+  }
+
+  textarea:focus {
+    outline: 1px solid #233884b6;
+  }
+  .full-screen-component-wrapper {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    background-color: rgb(0 0 0 / 47%);
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  .main-panel-wrapper {
+    width: 60%;
+    max-width: 920px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
+    position: relative;
+  }
+  .panel-header {
+    display: flex;
+    padding-left: 48px;
+    padding-right: 48px;
+    padding-top: 48px;
+    padding-bottom: 4px;
+  }
+  .panel-header .back-button-wrapper {
+    display: flex;
+    height: 32px;
+    width: 32px;
+    margin-right: 12px;
+    margin-top: -2px;
+  }
+  .panel-header .panel-title-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-divider {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #6c71f8, #58cdea);
+    margin-bottom: 48px;
+  }
+  .panel-header .panel-title-wrapper .panel-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .panel-header .panel-title-wrapper p {
+    color: #8998a9;
+    font-family: "Gilroy Medium", sans-serif;
+    font-size: 12px;
+    margin: 4px 0 16px 0;
+  }
+  .table,
+  .t {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #d0d1eb;
+  }
+
+  .t thead tr th {
+    border: 1px solid #d0d1eb;
+  }
+  .table .table-row {
+    display: table-row;
+
+    border-bottom: 1px solid #d0d1eb;
+  }
+  .table-cell {
+    vertical-align: top;
+  }
+
+  .table .table-row .table-cell:last-child {
+    border-left: 1px solid #d0d1eb;
+  }
+
+  .last-row .table-cell {
+    border-bottom: none !important;
+  }
+
+  .table-cell.full-width {
+    border-left: none !important;
+    width: 100%;
+  }
+
+  .input-wrapper label {
+    font-size: 10px;
+    font-family: "Gilroy Bold", sans-serif;
+    font-weight: 600;
+    color: #5c6276;
+    margin-bottom: 2px;
+    display: block;
+  }
+
+  .input-wrapper.inline * {
+    display: inline-block;
+    margin-right: 4px;
+  }
+
+  .barcode-spacer {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 14px;
+  }
+
+  .flex-input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 32px;
+  }
+
+  .table-row .table-cell:first-child {
+    max-width: 50%;
+  }
+
+  .table-row.last-row .table-cell:first-child {
+    column-span: 2;
+  }
+
+  .cell-content {
+    padding: 4px;
+  }
+
+  .input-wrapper.cell-content {
+    display: flex; /* Enable Flexbox */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: space-between; /* Align one to the top and the other to the bottom */
+    height: 100%; /* Ensure the container has height, adjust as needed */
+  }
+
+  .table-wrapper {
+    max-width: 100%;
+    overflow: auto;
+    margin-top: 4px;
+  }
+
+  .row-width-half {
+    width: 50%;
+  }
+  .tnc-wrapper p {
+    font-size: 10px;
+    font-family: "Gilroy Medium", sans-serif;
+    color: #2c2d32;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .tnc-wrapper tr {
+    border-bottom: 1px solid #d0d1eb;
+  }
+  .tnc-wrapper td:nth-child(2) {
+    border-left: 1px solid #d0d1eb;
+  }
+
+  .tnc-wrapper td.left-border {
+    border-left: 1px solid #d0d1eb;
+  }
+
+  .carrier-detail-wrapper label,
+  .scac-detail-wrapper label,
+  .bol-number-wrapper label {
+    min-width: 92px;
+  }
+
+  .highlight-error {
+    background-color: #ffd2d2;
+  }
+
+  .highlight-error:focus {
+    outline: 1px solid #ff0000;
+  }
+
+  /* table specific changes */
+  .t tr,
+  .t th {
+    border-bottom: 1px solid #d0d1eb;
+  }
+  .t tr:last-child {
+    border-bottom: none;
+  }
+  .t tr td,
+  .t th td {
+    border-left: 1px solid #d0d1eb;
+    border-right: 1px solid #d0d1eb;
+  }
+  .t tr td:last-child,
+  .t th td:last-child {
+    border-left: none;
+  }
+  .t th {
+    font-size: 10px;
+    line-height: 1.2;
+    font-family: "Gilroy semiBold";
+    text-align: center;
+    color: #282946;
+  }
+
+  .t td {
+    font-size: 12px;
+    line-height: 2;
+    font-family: "Gilroy Medium";
+    text-align: center;
+    color: #282946;
+  }
+
+  .t .bold {
+    font-family: "Gilroy Bold";
+  }
+  .t .bol-item-table {
+    width: calc(100%);
+    border-collapse: collapse;
+    border: 1px solid #d0d1eb;
+    font-size: 12px;
+  }
+
+  .t .bol-item-table th {
+    background-color: #d0d1eb;
+  }
+
+  .t .bol-item-table tr {
+    border-bottom: 1px solid #d0d1eb;
+  }
+  .t .bol-item-table td {
+    border-left: 1px solid #d0d1eb;
+  }
+
+  .table-name-header {
+    text-align: center !important;
+    border: 1px solid #282946;
+    background-color: #282946;
+    color: white;
+  }
+
+  .table-title {
+    font-size: 12px;
+    line-height: 1.2;
+    font-family: "Gilroy semiBold";
+    text-align: center;
+    color: white;
+    margin: 4px 0px;
+  }
+  .t .dud-cell {
+    background-color: #e9e9e9;
+  }
+  p.value {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+  }
+
+  .bol-carrier-info-table {
+    width: 100%;
+    table-layout: auto; /* Use auto to allow columns to be squeezed */
+    border-collapse: collapse; /* Optional: Collapse table borders */
+  }
+
+  .checkbox-label {
+    font-size: 12px !important;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 12px !important;
+  }
+</style>

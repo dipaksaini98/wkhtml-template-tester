@@ -28,6 +28,7 @@ func TemplateGenerator(w http.ResponseWriter, r *http.Request) {
 		// Write the response body on error
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprint(w, res)
+		fmt.Println(err)
 		return
 	}
 

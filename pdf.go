@@ -47,7 +47,7 @@ func GeneratePDF(body *bytes.Buffer) (*bytes.Buffer, error) {
 
 	err = pdfg.Create()
 	if err != nil {
-		return nil, errors.Wrap(err, "PDF Error: Failed to create pdf dociment.")
+		return nil, errors.Wrap(err, "PDF Error: Failed to create pdf document.")
 	}
 	buf := pdfg.Buffer()
 	return buf, nil
