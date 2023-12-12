@@ -1,10 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <title>TETS</title>
-  </head>
-  <body>
-    <input type="checkbox" id="myCheckbox" {{if .CheckboxState}}checked{{end}}>
-  </body>
+    <style>
+        .custom-checkbox {
+            width: 20px; /* Set your desired width */
+            height: 20px; /* Set your desired height */
+            background-color: #fff; /* Background color when unchecked */
+            border: 1px solid #000; /* Border color */
+            position: relative;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 70%;
+            border: 2px solid #000; /* Checkmark color */
+            border-left: none;
+            border-top: none;
+            display: none;
+        }
+
+        .custom-checkbox.checked {
+            background-color: #00f; /* Background color when checked */
+        }
+
+        .custom-checkbox.checked .checkmark {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-checkbox{{if .CheckboxState}} checked{{end}}">
+        <div class="checkmark"></div>
+    </div>
+</body>
 </html>
