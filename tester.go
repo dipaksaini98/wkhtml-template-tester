@@ -2,255 +2,127 @@ package main
 
 import (
 	"os"
-	"time"
+	"template-tester/schema"
 )
 
 func GenerateTemplate() (string, error) {
 	templateFileName := "input.html"
 	templateFilePath := "input.html"
 
-	// -------------------------------------- structure --------------------------------------
+	// ---------------------------------- SAMPLE DATA ----------------------------------
 
-	// FreightCounted represents schema for FreightCounted
-	type FreightCounted struct {
-		ByShipper       bool
-		ByDriverPallets bool
-		ByDriverPieces  bool
+	shipFrom := schema.ShipFrom{
+		Address: "123 Main St, Cityville, State",
+		FOB:     true,
+		SID:     "S123",
 	}
 
-	// TrailerLoaded represents schema for TrailerLoaded
-	type TrailerLoaded struct {
-		ByShipper bool
-		ByDriver  bool
+	freightChargeTerms := schema.FreightChargeTerms{
+		Collect:    true,
+		Prepaid:    false,
+		ThirdParty: true,
 	}
 
-	type Currency struct {
-		Code   string
-		Symbol string
+	shipTo := schema.ShipTo{
+		Address:    "456 Oak St, Townsville, State",
+		FOB:        false,
+		CID:        "C123",
+		LocationNo: "L456",
 	}
 
-	// CODAmount represents schema for CODAmount
-	type CODAmount struct {
-		Currency Currency
-		Amount   string
+	billTo := schema.BillTo{
+		Address: "789 Pine St, Villageton, State",
 	}
 
-	// FeeTerms represents schema for FeeTerms
-	type FeeTerms struct {
-		Prepaid                 bool
-		Collect                 bool
-		CustomerCheckAcceptable bool
+	orderInfo := schema.OrderInfo{
+		OrderNumber:           "ORD123",
+		Pkgs:                  3,
+		Weight:                150.5,
+		WeightUnit:            "lbs",
+		PalletOrSlip:          true,
+		AdditionalShipperInfo: "Additional Shipper Info",
 	}
 
-	// CarrierData represents schema for Carrier data
-	type CarrierData struct {
-		HandlingUnitQty      int
-		HandlingUnitType     string
-		PackageQty           int
-		PackageType          string
-		Weight               float64
-		WeightUnit           string
-		HazardousMaterial    bool
-		CommodityDescription string
-		NMFC                 string
-		Class                string
+	customerOrderInfo := schema.CustomerOrderInfo{
+		OrderInfo:     []schema.OrderInfo{orderInfo},
+		TotalPackages: 3,
+		TotalWeight:   "150.5 lbs",
 	}
 
-	// CarrierInfo represents schema for CarrierInfo
-	type CarrierInfo struct {
-		CarrierData          []CarrierData
-		TotalPackages        int
-		TotalWeight          string
-		TotalHandlingUnitQty int
+	carrierData := schema.CarrierData{
+		HandlingUnitQty:      2,
+		HandlingUnitType:     "Pallet",
+		PackageQty:           5,
+		PackageType:          "Box",
+		Weight:               300.8,
+		WeightUnit:           "lbs",
+		HazardousMaterial:    false,
+		CommodityDescription: "Electronics",
+		NMFC:                 "12345",
+		Class:                "85",
 	}
 
-	type ShipTo struct {
-		Address    string
-		FOB        bool
-		CID        string
-		LocationNo string
+	carrierInfo := schema.CarrierInfo{
+		CarrierData:          []schema.CarrierData{carrierData},
+		TotalHandlingUnitQty: 2,
+		TotalPackages:        5,
+		TotalWeight:          "300.8 lbs",
 	}
 
-	type BillTo struct {
-		Address string
+	currency := schema.Currency{
+		Symbol: "$",
+		Code:   "USD",
 	}
 
-	type OrderInfo struct {
-		ClientName            string
-		Status                string
-		OrderNumber           string
-		Pkgs                  int
-		Weight                float64
-		WeightUnit            string
-		PalletOrSlip          bool
-		AdditionalShipperInfo string
-		ShipTo                *ShipTo
-		BillTo                *BillTo
+	codAmount := schema.CODAmount{
+		Amount:   100.0,
+		Currency: currency,
 	}
 
-	// CustomerOrderInfo represents schema for CustomerOrderInfo
-	type CustomerOrderInfo struct {
-		OrderInfo     []OrderInfo
-		TotalPackages int
-		TotalWeight   string
+	feeTerms := schema.FeeTerms{
+		Collect:                 true,
+		Prepaid:                 false,
+		CustomerCheckAcceptable: true,
 	}
 
-	// FreightChargeTerms represents schema for FreightChargeTerms
-	type FreightChargeTerms struct {
-		Prepaid    bool
-		Collect    bool
-		ThirdParty bool
+	trailerLoaded := schema.TrailerLoaded{
+		ByShipper: true,
+		ByDriver:  false,
 	}
 
-	type ShipFrom struct {
-		Address string
-		SID     string
-		FOB     bool
+	freightCounted := schema.FreightCounted{
+		ByShipper:       true,
+		ByDriverPallets: false,
+		ByDriverPieces:  true,
 	}
 
-	type BillOfLading struct {
-		WarehouseLogo      string
-		Code               int64
-		Url                string
-		BOLNumber          string
-		ShipFrom           *ShipFrom
-		ShipTo             *ShipTo
-		BillTo             *BillTo
-		CarrierName        string
-		TrailerNo          string
-		SealNumbers        string
-		SCAC               string
-		ProNo              string
-		FreightChargeTerms *FreightChargeTerms
-		MasterBOL          bool
-		Instruction        string
-		CustomerOrderInfo  *CustomerOrderInfo
-		CarrierInfo        *CarrierInfo
-		TotalShipmentValue string
-		FOB                string
-		CODAmount          *CODAmount
-		FeeTerms           *FeeTerms
-		TrailerLoaded      *TrailerLoaded
-		FreightCounted     *FreightCounted
-		IsCancelled        bool
-		CancelledAt        *time.Time
-		CancellationReason string
-		GeneratedDate      string
-
-		CreatedAt *time.Time
-		UpdatedAt *time.Time
+	// Create an instance of BolStructure and fill it with sample data
+	bolData := schema.BolStructure{
+		GeneratedDate:      "2023-01-01",
+		WarehouseLogo:      "https://upload.wikimedia.org/wikipedia/commons/9/97/Document_icon_%28the_Noun_Project_27904%29.svg",
+		ShipFrom:           shipFrom,
+		BOLNumber:          "BOL123",
+		CarrierName:        "ACME Shipping",
+		TrailerNo:          "TR123",
+		SealNumbers:        "SEAL456",
+		SCAC:               "ABCD",
+		ProNo:              "PRO456",
+		FreightChargeTerms: freightChargeTerms,
+		MasterBOL:          true,
+		ShipTo:             shipTo,
+		BillTo:             billTo,
+		CustomerOrderInfo:  customerOrderInfo,
+		Instruction:        "Handle with care",
+		CarrierInfo:        carrierInfo,
+		CODAmount:          codAmount,
+		FeeTerms:           feeTerms,
+		TrailerLoaded:      trailerLoaded,
+		FreightCounted:     freightCounted,
 	}
 
-	// --------------------------------------
+	// ----------------------------------
 
-	// SampleObject represents a sample instance of BillOfLading
-	var SampleObject = BillOfLading{
-		WarehouseLogo: "sample_logo_url",
-		Code:          12345,
-		Url:           "sample_url",
-		BOLNumber:     "BOL123456",
-		ShipFrom: &ShipFrom{
-			Address: "Sample Ship From Address",
-			SID:     "SID123",
-			FOB:     true,
-		},
-		ShipTo: &ShipTo{
-			Address:    "Sample Ship To Address",
-			FOB:        false,
-			CID:        "CID789",
-			LocationNo: "Location123",
-		},
-		BillTo: &BillTo{
-			Address: "Sample Bill To Address",
-		},
-		CarrierName: "Sample Carrier",
-		TrailerNo:   "TR123",
-		SealNumbers: "Seal123",
-		SCAC:        "SCAC123",
-		ProNo:       "PRO456",
-		FreightChargeTerms: &FreightChargeTerms{
-			Prepaid:    true,
-			Collect:    false,
-			ThirdParty: true,
-		},
-		MasterBOL:   true,
-		Instruction: "Handle with care",
-		CustomerOrderInfo: &CustomerOrderInfo{
-			OrderInfo: []OrderInfo{
-				{
-					ClientName:            "Client1",
-					Status:                "Shipped",
-					OrderNumber:           "Order123",
-					Pkgs:                  5,
-					Weight:                150.5,
-					WeightUnit:            "lbs",
-					PalletOrSlip:          true,
-					AdditionalShipperInfo: "Fragile",
-					ShipTo: &ShipTo{
-						Address:    "Sample Ship To Address",
-						FOB:        false,
-						CID:        "CID789",
-						LocationNo: "Location123",
-					},
-					BillTo: &BillTo{
-						Address: "Sample Bill To Address",
-					},
-				},
-			},
-			TotalPackages: 5,
-			TotalWeight:   "150.5 lbs",
-		},
-		CarrierInfo: &CarrierInfo{
-			CarrierData: []CarrierData{
-				{
-					HandlingUnitQty:      2,
-					HandlingUnitType:     "Pallet",
-					PackageQty:           10,
-					PackageType:          "Box",
-					Weight:               100.2,
-					WeightUnit:           "lbs",
-					HazardousMaterial:    false,
-					CommodityDescription: "Sample Commodity",
-					NMFC:                 "NMFC123",
-					Class:                "ClassA",
-				},
-			},
-			TotalPackages:        10,
-			TotalWeight:          "200.5 lbs",
-			TotalHandlingUnitQty: 2,
-		},
-		TotalShipmentValue: "5000 USD",
-		FOB:                "FOB Sample",
-		CODAmount: &CODAmount{
-			Currency: Currency{
-				Code:   "USD",
-				Symbol: "$",
-			},
-			Amount: "100.00",
-		},
-		FeeTerms: &FeeTerms{
-			Prepaid:                 true,
-			Collect:                 false,
-			CustomerCheckAcceptable: true,
-		},
-		TrailerLoaded: &TrailerLoaded{
-			ByShipper: true,
-			ByDriver:  false,
-		},
-		FreightCounted: &FreightCounted{
-			ByShipper:       true,
-			ByDriverPallets: false,
-			ByDriverPieces:  true,
-		},
-		IsCancelled:        false,
-		CancelledAt:        nil, // Replace with actual time if canceled
-		CancellationReason: "Not applicable",
-		GeneratedDate:      "2023-01-01", // Replace with actual generated date
-		CreatedAt:          nil,          // Replace with actual time
-		UpdatedAt:          nil,          // Replace with actual time
-	}
-
-	body, err := ParseTemplateFile(templateFileName, templateFilePath, SampleObject)
+	body, err := ParseTemplateFile(templateFileName, templateFilePath, bolData)
 	if err != nil {
 		return "Failure!", err
 	}
