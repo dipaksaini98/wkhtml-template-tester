@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"strings"
 	"template-tester/schema"
 )
 
@@ -122,10 +123,35 @@ func GenerateTemplate() (string, error) {
 
 	// ----------------------------------
 
+	addendumString := `<div class="ql-container ql-snow"><div class="ql-editor"><h2>Hey this is title one</h2><p><strong style="color: rgb(0, 0, 0);">Lorem Ipsum</strong><span style="color: rgb(0, 0, 0);">&nbsp;is simply dummy text of th</span><strong style="color: rgb(0, 0, 0);"><em>e printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but a</em></strong><span style="color: rgb(0, 0, 0);">lso the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of </span></p><p><br></p><pre class="ql-syntax" spellcheck="false">Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+	</pre><p><br></p><ol><li><span style="color: rgb(0, 0, 0);">Operation one </span></li><li><span style="color: rgb(0, 0, 0);">Operation two.                    </span></li><li><span style="color: rgb(0, 0, 0);">operation three</span></li></ol><p><br></p><p><br></p><h2>Hey this is title one</h2><blockquote><strong style="color: rgb(0, 0, 0);">Lorem Ipsum</strong><span style="color: rgb(0, 0, 0);">&nbsp;is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</span></blockquote><p><br></p><ol><li><span style="color: rgb(0, 0, 0);">Operation one </span></li><li><span style="color: rgb(0, 0, 0);">Operation two</span></li><li><span style="color: rgb(0, 0, 0);">operation three</span></li></ol><p><br></p><p><br></p></div></div>`
+
+	if addendumString != "" {
+
+		templateContent, err := os.ReadFile(templateFileName)
+
+		if err != nil {
+			return "Failure!", err
+		}
+
+		finalHTML := strings.Replace(string(templateContent), "<!-- addendumDataPlaceholder -->", addendumString, -1)
+
+		tempHTMLFileName := "output.html"
+		err = os.WriteFile(tempHTMLFileName, []byte(finalHTML), 0644)
+		if err != nil {
+			return "Failure!", err
+		}
+
+		templateFileName = tempHTMLFileName
+		templateFilePath = tempHTMLFileName
+
+	}
+
 	body, err := ParseTemplateFile(templateFileName, templateFilePath, bolData)
 	if err != nil {
 		return "Failure!", err
 	}
+
 	buff, err := GeneratePDF(body)
 	if err != nil {
 		return "Failure!", err
