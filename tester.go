@@ -34,3 +34,5 @@ func GenerateTemplate() (string, error) {
 
 	return "Success!", nil
 }
+
+// this is just a test comment
